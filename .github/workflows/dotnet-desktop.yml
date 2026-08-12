@@ -1,0 +1,48 @@
+name: .NET Desktop
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    strategy:
+      matrix:
+        configuration: [Release]
+        platform: [x64]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 10
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+          dotnet-quality: preview
+
+      - name: Restore
+        run: dotnet restore DataFlushWinUI.csproj -r win-${{ matrix.platform }}
+
+      - name: Build
+        run: dotnet build DataFlushWinUI.csproj -c ${{ matrix.configuration }} -r win-${{ matrix.platform }} --no-restore
+
+      - name: Publish self-contained
+        run: >
+          dotnet publish DataFlushWinUI.csproj
+          -c ${{ matrix.configuration }}
+          -r win-${{ matrix.platform }}
+          --self-contained true
+          --no-build
+          -o publish/DataFlushWinUI-win-${{ matrix.platform }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DataFlushWinUI-win-${{ matrix.platform }}
+          path: publish/DataFlushWinUI-win-${{ matrix.platform }}
