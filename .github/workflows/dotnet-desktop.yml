@@ -24,13 +24,20 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 10.0.x
-          dotnet-quality: preview
 
       - name: Restore
-        run: dotnet restore DataFlushWinUI.csproj -r win-${{ matrix.platform }}
+        run: >
+          dotnet restore DataFlushWinUI.csproj
+          -r win-${{ matrix.platform }}
+          -p:PublishReadyToRun=false
 
       - name: Build
-        run: dotnet build DataFlushWinUI.csproj -c ${{ matrix.configuration }} -r win-${{ matrix.platform }} --no-restore
+        run: >
+          dotnet build DataFlushWinUI.csproj
+          -c ${{ matrix.configuration }}
+          -r win-${{ matrix.platform }}
+          --no-restore
+          -p:PublishReadyToRun=false
 
       - name: Publish self-contained
         run: >
@@ -39,6 +46,7 @@ jobs:
           -r win-${{ matrix.platform }}
           --self-contained true
           --no-build
+          -p:PublishReadyToRun=false
           -o publish/DataFlushWinUI-win-${{ matrix.platform }}
 
       - name: Upload artifact
