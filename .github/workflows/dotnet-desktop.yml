@@ -51,6 +51,7 @@ jobs:
           -r win-${{ matrix.platform }}
           --self-contained true
           --no-build
+          -p:WindowsAppSDKSelfContained=true
           -p:PublishReadyToRun=false
           -o publish/DataFlushWinUI-win-${{ matrix.platform }}
 
