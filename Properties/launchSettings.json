@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "DataFlushWinUI (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "DataFlushWinUI (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

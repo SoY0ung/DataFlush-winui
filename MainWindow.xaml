@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Window
+    x:Class="DataFlushWinUI.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="DataFlush"
+    mc:Ignorable="d">
+
+    <Grid x:Name="WindowRoot" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TitleBar
+            x:Name="AppTitleBar"
+            Title="DataFlush"
+            IsBackButtonVisible="False"
+            IsPaneToggleButtonVisible="False" />
+
+        <NavigationView
+            x:Name="NavView"
+            Grid.Row="1"
+            IsBackButtonVisible="Collapsed"
+            IsPaneToggleButtonVisible="True"
+            OpenPaneLength="176"
+            CompactPaneLength="48"
+            PaneDisplayMode="Left"
+            SelectionChanged="NavView_SelectionChanged">
+            <NavigationView.MenuItems>
+                <NavigationViewItem x:Name="CleanNavItem" Content="清洗分类" IsSelected="True" Tag="clean" ToolTipService.ToolTip="清洗分类">
+                    <NavigationViewItem.Icon><FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE771;" /></NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="AiNavItem" Content="AI辅助" Tag="ai" ToolTipService.ToolTip="AI辅助">
+                    <NavigationViewItem.Icon><FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE794;" /></NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="HatNavItem" Content="帽子分类" Tag="hat" ToolTipService.ToolTip="帽子分类">
+                    <NavigationViewItem.Icon><FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE7BE;" /></NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+            <Frame x:Name="NavFrame" />
+        </NavigationView>
+    </Grid>
+</Window>
