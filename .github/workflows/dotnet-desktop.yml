@@ -3,6 +3,8 @@ name: .NET Desktop
 on:
   push:
     branches: [ "main", "master" ]
+    tags:
+      - "v*"
   pull_request:
     branches: [ "main", "master" ]
   workflow_dispatch:
@@ -15,6 +17,9 @@ jobs:
       matrix:
         configuration: [Release]
         platform: [x64]
+
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout
@@ -49,8 +54,24 @@ jobs:
           -p:PublishReadyToRun=false
           -o publish/DataFlushWinUI-win-${{ matrix.platform }}
 
+      - name: Create zip package
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path artifacts | Out-Null
+          Compress-Archive `
+            -Path "publish/DataFlushWinUI-win-${{ matrix.platform }}/*" `
+            -DestinationPath "artifacts/DataFlushWinUI-win-${{ matrix.platform }}.zip" `
+            -Force
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: DataFlushWinUI-win-${{ matrix.platform }}
-          path: publish/DataFlushWinUI-win-${{ matrix.platform }}
+          path: artifacts/DataFlushWinUI-win-${{ matrix.platform }}.zip
+
+      - name: Upload to GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: artifacts/DataFlushWinUI-win-${{ matrix.platform }}.zip
+          generate_release_notes: true
